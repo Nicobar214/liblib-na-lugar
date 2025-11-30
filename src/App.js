@@ -54,11 +54,10 @@ const Toast = ({ message, type, onClose }) => {
 // Landing Page Component
 const LandingPage = ({ onNavigateToLogin }) => {
   return (
-    <div style={{ fontFamily: 'Montserrat, sans-serif' }}>
+    <div style={{ fontFamily: 'Montserrat, sans-serif' }} className="overflow-y-scroll h-screen">
       {/* Hero Section */}
       <div id="home" className="min-h-screen relative" style={{ backgroundColor: '#fff1cf' }}>
         <div className="container mx-auto px-4 py-6">
-          {/* Header */}
           <div className="flex justify-between items-center mb-20">
             <div className="flex items-center">
               <img src="bookhive logo.png" alt="BookHive Logo" className="h-12 mr-3" />
@@ -71,7 +70,6 @@ const LandingPage = ({ onNavigateToLogin }) => {
             </nav>
           </div>
 
-          {/* Hero Content */}
           <div className="flex items-center justify-between">
             <div className="max-w-2xl">
               <div className="flex items-center justify-start mb-4">
@@ -84,12 +82,6 @@ const LandingPage = ({ onNavigateToLogin }) => {
               <p className="text-lg mb-4 leading-relaxed" style={{ color: '#3C2F2F' }}>
                 BookHive is your digital hive of knowledge — a smart and organized space where every book finds its perfect place.
               </p>
-              <p className="text-lg mb-4 leading-relaxed" style={{ color: '#3C2F2F' }}>
-                Built for simplicity and precision, it empowers librarians to manage collections, track borrowings, and maintain records with ease.
-              </p>
-              <p className="text-lg mb-8 leading-relaxed" style={{ color: '#3C2F2F' }}>
-                With its sleek interface and intuitive tools, BookHive transforms library management into a seamless experience.
-              </p>
               <button 
                 onClick={() => onNavigateToLogin()}
                 className="px-8 py-4 rounded-full text-lg font-bold flex items-center hover:opacity-90 transition"
@@ -99,161 +91,12 @@ const LandingPage = ({ onNavigateToLogin }) => {
                 <img src="/arrow.png" alt="Arrow" className="h-6 ml-3" />
               </button>
             </div>
-            
             <div className="relative w-1/2 h-96">
               <img src="/books2.jpg" alt="Books" className="absolute inset-0 w-full h-full object-cover rounded-l-full" />
             </div>
           </div>
         </div>
       </div>
-
-      {/* About Section */}
-      <div id="about" className="min-h-screen py-20 bg-cover bg-center" style={{ backgroundImage: 'url(/About-bg.png)' }}>
-        <div className="container mx-auto px-4 text-center">
-          <div className="mb-16 relative">
-            <img src="/book-vid.gif" alt="Book animation" className="h-48 absolute left-0 top-0" />
-            <h2 className="text-5xl font-bold mb-4" style={{ color: '#3C2F2F' }}>About BookHive</h2>
-            <p className="text-lg max-w-3xl mx-auto" style={{ color: '#5A4B4B' }}>
-              The BookHive Library Inventory System is a database-driven application built to assist librarians in organizing and maintaining book collections.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {[
-              { title: 'CRUD Operations', desc: 'Add, view, edit, or delete book records.' },
-              { title: 'Book Details', desc: 'Store important information like Book ID, Title, Author, Category, Publisher, Year, and Availability Status.' },
-              { title: 'Borrowing Management', desc: 'Record and monitor who borrowed books, along with Date Borrowed and Due Date.' },
-              { title: 'Return Updates', desc: 'Easily update book availability once returned.' }
-            ].map((feature, idx) => (
-              <div 
-                key={idx}
-                className="p-6 rounded-xl shadow-lg hover:transform hover:scale-105 transition"
-                style={{ backgroundColor: '#E2B270' }}
-              >
-                <h3 className="text-xl font-bold mb-3" style={{ color: '#3C2F2F' }}>{feature.title}</h3>
-                <p style={{ color: '#5A4B4B' }}>{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <p className="text-lg max-w-4xl mx-auto" style={{ color: '#5A4B4B' }}>
-            BookHive simplifies library management by reducing manual record-keeping, improving accuracy, and ensuring a well-maintained inventory for every librarian.
-          </p>
-        </div>
-      </div>
-
-      {/* Contact Section */}
-      <div id="contact" className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #F4E6C2 0%, #F8F4E3 100%)' }}>
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl italic mb-4" style={{ fontFamily: 'Playfair Display, serif', color: '#3C2F2F' }}>
-              Get in Touch
-            </h2>
-            <p className="text-lg" style={{ color: '#5A4B4B' }}>
-              We'd love to hear from you! Whether you have questions about BookHive or need support, our team is here to help.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="space-y-6">
-              <div>
-                <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Your Name *</label>
-                <input 
-                  type="text" 
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
-                  style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                  placeholder="Enter your full name"
-                />
-              </div>
-              <div>
-                <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Your Email *</label>
-                <input 
-                  type="email" 
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
-                  style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                  placeholder="Enter your email address"
-                />
-              </div>
-              <div>
-                <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Subject *</label>
-                <input 
-                  type="text" 
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
-                  style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                  placeholder="What is this about?"
-                />
-              </div>
-              <div>
-                <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Your Message *</label>
-                <textarea 
-                  rows="5"
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none resize-none"
-                  style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                  placeholder="Tell us more..."
-                />
-              </div>
-              <button 
-                type="submit"
-                className="w-full py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
-                style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
-              >
-                Send Message
-              </button>
-            </div>
-
-            <div className="space-y-8">
-              {[
-                { icon: <Mail className="w-6 h-6" />, title: 'Email Us', content: 'bookhive@gmail.com' },
-                { icon: <Phone className="w-6 h-6" />, title: 'Call Us', content: '09123456781' },
-                { icon: <MapPin className="w-6 h-6" />, title: 'Visit Us', content: 'West Visayas State University' },
-                { icon: <Clock className="w-6 h-6" />, title: 'Business Hours', content: 'Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM' }
-              ].map((info, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-lg flex-shrink-0" style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}>
-                    {info.icon}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1" style={{ color: '#3C2F2F' }}>{info.title}</h3>
-                    <p style={{ color: '#5A4B4B', whiteSpace: 'pre-line' }}>{info.content}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="py-12" style={{ backgroundColor: '#3C2F2F', color: '#F8F4E3' }}>
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <img src="bookhive logo.png" alt="BookHive Logo" className="h-10 mr-3" />
-                <span className="text-xl font-bold" style={{ color: '#E2B270' }}>BookHive</span>
-              </div>
-              <p className="mb-4">Your Hive of Knowledge and Discovery. Managing libraries made simple and efficient.</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4" style={{ color: '#E2B270' }}>Quick Links</h3>
-              <div className="space-y-2">
-                <a href="#home" className="block hover:opacity-75">Home</a>
-                <a href="#about" className="block hover:opacity-75">About Us</a>
-                <a href="#contact" className="block hover:opacity-75">Contact</a>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4" style={{ color: '#E2B270' }}>Contact Info</h3>
-              <p>📧 bookhive@gmail.com</p>
-              <p>📞 09123456781</p>
-              <p>📍 West Visayas State University</p>
-            </div>
-          </div>
-          <div className="border-t pt-6 text-center" style={{ borderColor: '#5A4B4B', color: '#A89898' }}>
-            <p>© 2025 BookHive. All rights reserved. | Designed with passion for libraries.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
@@ -278,72 +121,17 @@ const Login = ({ onSwitchToSignup, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #F4E6C2 0%, #F8F4E3 100%)' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 overflow-y-scroll" style={{ background: 'linear-gradient(135deg, #F4E6C2 0%, #F8F4E3 100%)' }}>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-      
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="flex items-center justify-center mb-8">
-          <img src="bookhive logo.png" alt="BookHive Logo" className="h-12 mr-3" />
-          <h1 className="text-3xl font-bold" style={{ color: '#3C2F2F' }}>BookHive</h1>
-        </div>
-        
-        <h2 className="text-2xl font-semibold mb-6 text-center" style={{ color: '#3C2F2F' }}>Librarian Login</h2>
-        
+        <h1 className="text-3xl font-bold mb-8 text-center" style={{ color: '#3C2F2F' }}>BookHive Login</h1>
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-bold mb-2" style={{ color: '#3C2F2F' }}>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-              style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-              required
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-bold mb-2" style={{ color: '#3C2F2F' }}>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-              style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-              required
-            />
-          </div>
-          
-          <button
-            onClick={handleLogin}
-            className="w-full py-3 rounded-lg font-bold text-lg hover:opacity-90 transition"
-            style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
-          >
-            Login
-          </button>
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 border-2 rounded-lg" style={{ borderColor: '#E2B270' }} />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-3 border-2 rounded-lg" style={{ borderColor: '#E2B270' }} />
+          <button onClick={handleLogin} className="w-full py-3 rounded-lg font-bold" style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}>Login</button>
         </div>
-        
-        <div className="mt-6 text-center">
-          <p style={{ color: '#5A4B4B' }}>
-            Don't have an account?{' '}
-            <button
-              onClick={onSwitchToSignup}
-              className="font-bold hover:opacity-75"
-              style={{ color: '#E2B270' }}
-            >
-              Sign Up
-            </button>
-          </p>
-          <button
-            onClick={onBack}
-            className="mt-4 text-sm hover:opacity-75"
-            style={{ color: '#5A4B4B' }}
-          >
-            ← Back to Home
-          </button>
-        </div>
+        <button onClick={onBack} className="mt-4 text-sm w-full text-center">Back to Home</button>
+        <button onClick={onSwitchToSignup} className="mt-2 text-sm w-full text-center font-bold">Sign Up Instead</button>
       </div>
     </div>
   );
@@ -358,24 +146,13 @@ const Signup = ({ onSwitchToLogin }) => {
 
   const handleSignup = async () => {
     if (!name || !email || !password) {
-      setToast({ message: 'Please fill in all fields', type: 'error' });
-      return;
-    }
-    if (password.length < 6) {
-      setToast({ message: 'Password must be at least 6 characters', type: 'error' });
+      setToast({ message: 'All fields required', type: 'error' });
       return;
     }
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
-      await addDoc(collection(db, 'librarians'), {
-        uid: userCredential.user.uid,
-        name,
-        email,
-        createdAt: serverTimestamp()
-      });
-      
-      setToast({ message: 'Account created successfully!', type: 'success' });
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await addDoc(collection(db, 'librarians'), { uid: cred.user.uid, name, email });
+      setToast({ message: 'Account created!', type: 'success' });
       setTimeout(onSwitchToLogin, 1500);
     } catch (error) {
       setToast({ message: error.message, type: 'error' });
@@ -383,71 +160,17 @@ const Signup = ({ onSwitchToLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #F4E6C2 0%, #F8F4E3 100%)' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 overflow-y-scroll" style={{ background: 'linear-gradient(135deg, #F4E6C2 0%, #F8F4E3 100%)' }}>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-      
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="flex items-center justify-center mb-8">
-          <img src="bookhive logo.png" alt="BookHive Logo" className="h-12 mr-3" />
-          <h1 className="text-3xl font-bold" style={{ color: '#3C2F2F' }}>BookHive</h1>
-        </div>
-        
-        <h2 className="text-2xl font-semibold mb-6 text-center" style={{ color: '#3C2F2F' }}>Librarian Signup</h2>
-        
+        <h1 className="text-3xl font-bold mb-8 text-center" style={{ color: '#3C2F2F' }}>BookHive Signup</h1>
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-bold mb-2" style={{ color: '#3C2F2F' }}>Full Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-              style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-bold mb-2" style={{ color: '#3C2F2F' }}>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-              style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-bold mb-2" style={{ color: '#3C2F2F' }}>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSignup()}
-              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-              style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-            />
-          </div>
-          
-          <button
-            onClick={handleSignup}
-            className="w-full py-3 rounded-lg font-bold text-lg hover:opacity-90 transition"
-            style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
-          >
-            Sign Up
-          </button>
+          <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-4 py-3 border-2 rounded-lg" style={{ borderColor: '#E2B270' }} />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 border-2 rounded-lg" style={{ borderColor: '#E2B270' }} />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-3 border-2 rounded-lg" style={{ borderColor: '#E2B270' }} />
+          <button onClick={handleSignup} className="w-full py-3 rounded-lg font-bold" style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}>Sign Up</button>
         </div>
-        
-        <p className="mt-6 text-center" style={{ color: '#5A4B4B' }}>
-          Already have an account?{' '}
-          <button
-            onClick={onSwitchToLogin}
-            className="font-bold hover:opacity-75"
-            style={{ color: '#E2B270' }}
-          >
-            Login
-          </button>
-        </p>
+        <button onClick={onSwitchToLogin} className="mt-4 text-sm w-full text-center font-bold">Login Instead</button>
       </div>
     </div>
   );
@@ -470,7 +193,8 @@ const Dashboard = ({ user, onLogout }) => {
     title: '',
     bookCode: '',
     author: '',
-    category: ''
+    category: '',
+    copies: 1 
   });
   
   const [borrowForm, setBorrowForm] = useState({
@@ -479,7 +203,8 @@ const Dashboard = ({ user, onLogout }) => {
     bookTitle: '',
     bookCode: '',
     borrowDate: '',
-    returnDate: ''
+    returnDate: '',
+    borrowQuantity: 1
   });
 
   const fetchBooks = async () => {
@@ -519,8 +244,14 @@ const Dashboard = ({ user, onLogout }) => {
     fetchBorrowedBooks();
   }, []);
 
+  // Handler for tab switching to ensure scroll reset
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    window.scrollTo(0, 0); // Reset scroll position to top
+  };
+
   const handleAddBook = async () => {
-    if (!newBook.title || !newBook.bookCode || !newBook.author || !newBook.category) {
+    if (!newBook.title || !newBook.bookCode || !newBook.author || !newBook.category || !newBook.copies) {
       setToast({ message: 'Please fill in all fields', type: 'error' });
       return;
     }
@@ -533,14 +264,16 @@ const Dashboard = ({ user, onLogout }) => {
     }
     
     try {
+      const numCopies = parseInt(newBook.copies);
       await addDoc(collection(db, 'books'), {
         ...newBook,
-        status: 'Available',
+        copies: numCopies,
+        status: numCopies > 0 ? 'Available' : 'Unavailable', // Changed here
         dateAdded: serverTimestamp()
       });
       
       setToast({ message: 'Book added successfully!', type: 'success' });
-      setNewBook({ title: '', bookCode: '', author: '', category: '' });
+      setNewBook({ title: '', bookCode: '', author: '', category: '', copies: 1 });
       fetchBooks();
     } catch (error) {
       setToast({ message: 'Error adding book', type: 'error' });
@@ -548,17 +281,20 @@ const Dashboard = ({ user, onLogout }) => {
   };
 
   const handleEditBook = async () => {
-    if (!editingBook.title || !editingBook.bookCode || !editingBook.author || !editingBook.category) {
+    if (!editingBook.title || !editingBook.bookCode || !editingBook.author || !editingBook.category || !editingBook.copies) {
       setToast({ message: 'Please fill in all fields', type: 'error' });
       return;
     }
     
     try {
+      const numCopies = parseInt(editingBook.copies);
       await updateDoc(doc(db, 'books', editingBook.id), {
         title: editingBook.title,
         bookCode: editingBook.bookCode,
         author: editingBook.author,
-        category: editingBook.category
+        category: editingBook.category,
+        copies: numCopies,
+        status: numCopies > 0 ? 'Available' : 'Unavailable' // Changed here
       });
       
       setToast({ message: 'Book updated successfully!', type: 'success' });
@@ -582,124 +318,139 @@ const Dashboard = ({ user, onLogout }) => {
   };
 
   const handleBorrowBook = async () => {
-    const { studentName, studentNumber, bookTitle, bookCode, borrowDate, returnDate } = borrowForm;
+    const { studentName, studentNumber, bookTitle, bookCode, borrowDate, returnDate, borrowQuantity } = borrowForm;
     
-    if (!studentName || !studentNumber || !bookTitle || !bookCode || !borrowDate || !returnDate) {
+    if (!studentName || !studentNumber || !bookTitle || !bookCode || !borrowDate || !returnDate || !borrowQuantity) {
       setToast({ message: 'Please fill in all fields', type: 'error' });
       return;
     }
     
-    // Validate dates
     if (new Date(returnDate) <= new Date(borrowDate)) {
       setToast({ message: 'Return date must be after borrow date', type: 'error' });
       return;
     }
     
-    // Check if book is available
+    // Check book availability and stock
     const bookToCheck = books.find(book => book.bookCode === bookCode);
     if (!bookToCheck) {
       setToast({ message: 'Book not found in inventory', type: 'error' });
       return;
     }
-    if (bookToCheck.status === 'Borrowed') {
-      setToast({ message: 'This book is already borrowed', type: 'error' });
+    
+    const requestedQty = parseInt(borrowQuantity);
+    if (bookToCheck.copies < requestedQty) {
+      setToast({ message: `Not enough copies! Only ${bookToCheck.copies} available.`, type: 'error' });
       return;
     }
     
     try {
+      // 1. Add record to borrowedBooks (store how many were borrowed)
       await addDoc(collection(db, 'borrowedBooks'), {
         ...borrowForm,
+        borrowQuantity: requestedQty,
         borrowedAt: serverTimestamp()
       });
       
-      const bookQuery = query(collection(db, 'books'), where('bookCode', '==', bookCode));
-      const bookSnapshot = await getDocs(bookQuery);
+      // 2. Update the Book Inventory (Decrement copies)
+      const newCopyCount = bookToCheck.copies - requestedQty;
+      await updateDoc(doc(db, 'books', bookToCheck.id), {
+        copies: newCopyCount,
+        status: newCopyCount > 0 ? 'Available' : 'Unavailable' // Changed here
+      });
       
-      if (!bookSnapshot.empty) {
-        const bookDoc = bookSnapshot.docs[0];
-        await updateDoc(doc(db, 'books', bookDoc.id), {
-          status: 'Borrowed'
-        });
-      }
-      
-      setToast({ message: 'Book borrowed successfully!', type: 'success' });
+      setToast({ message: 'Book borrowed successfully! Inventory updated.', type: 'success' });
       setBorrowForm({
         studentName: '',
         studentNumber: '',
         bookTitle: '',
         bookCode: '',
         borrowDate: '',
-        returnDate: ''
+        returnDate: '',
+        borrowQuantity: 1
       });
       fetchBooks();
       fetchBorrowedBooks();
     } catch (error) {
+      console.error(error);
       setToast({ message: 'Error borrowing book', type: 'error' });
     }
   };
 
-  const handleReturnBook = async (borrowedBookId, bookCode) => {
+  const handleReturnBook = async (borrowedBookId, bookCode, quantityBorrowed) => {
     try {
+      // 1. Find the book in inventory to add stock back
       const bookQuery = query(collection(db, 'books'), where('bookCode', '==', bookCode));
       const bookSnapshot = await getDocs(bookQuery);
       
       if (!bookSnapshot.empty) {
         const bookDoc = bookSnapshot.docs[0];
+        const currentData = bookDoc.data();
+        
+        // Increment copies by the amount that was originally borrowed
+        const qtyToReturn = quantityBorrowed ? parseInt(quantityBorrowed) : 1;
+        const newCopyCount = (currentData.copies || 0) + qtyToReturn;
+
         await updateDoc(doc(db, 'books', bookDoc.id), {
-          status: 'Available'
+          copies: newCopyCount,
+          status: 'Available' // Since we returned, it's definitely available now
         });
       }
       
+      // 2. Mark as returned in borrowedBooks
       await updateDoc(doc(db, 'borrowedBooks', borrowedBookId), {
         returned: true,
         returnedAt: serverTimestamp()
       });
       
-      setToast({ message: 'Book returned successfully!', type: 'success' });
+      setToast({ message: 'Book returned successfully! Stock updated.', type: 'success' });
       fetchBooks();
       fetchBorrowedBooks();
     } catch (error) {
+      console.error(error);
       setToast({ message: 'Error returning book', type: 'error' });
     }
   };
 
-  // Filter and search functions
   // Filter and search functions
   const filteredBooks = books.filter(book => {
     const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
       book.bookCode.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === 'all' || book.category === filterCategory;
-    const matchesStatus = filterStatus === 'all' || book.status === filterStatus;
+    
+    // Updated logic: "Unavailable" filter now matches both "Unavailable" and "Out of Stock"
+    let matchesStatus = filterStatus === 'all' || book.status === filterStatus;
+    if (filterStatus === 'Unavailable') {
+      matchesStatus = book.status === 'Unavailable' || book.status === 'Out of Stock';
+    }
+
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
   const activeBorrowedBooks = borrowedBooks.filter(b => !b.returned);
   const returnedBooks = borrowedBooks.filter(b => b.returned);
   
-  // Check for overdue books
   const isOverdue = (returnDate) => {
     return new Date(returnDate) < new Date();
   };
   
   const overdueBorrowedBooks = activeBorrowedBooks.filter(b => isOverdue(b.returnDate));
   
-  // Statistics
   const stats = {
-    totalBooks: books.length,
+    totalBooks: books.reduce((acc, curr) => acc + (parseInt(curr.copies) || 0), 0),
+    uniqueTitles: books.length,
     availableBooks: books.filter(b => b.status === 'Available').length,
-    borrowedBooks: books.filter(b => b.status === 'Borrowed').length,
+    borrowedBooks: activeBorrowedBooks.length,
     overdueBooks: overdueBorrowedBooks.length
   };
   
-  // Get unique categories
   const categories = [...new Set(books.map(book => book.category))];
-
-  // Auto-complete for book selection
-  const availableBooks = books.filter(b => b.status === 'Available');
+  
+  const availableBooks = books.filter(b => b.copies > 0);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F8F4E3', fontFamily: 'Montserrat, sans-serif' }}>
+    // FIX: Added 'overflow-y-scroll' to force scrollbar presence and prevent layout shifts
+    <div className="min-h-screen overflow-y-scroll" style={{ backgroundColor: '#F8F4E3', fontFamily: 'Montserrat, sans-serif' }}>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       
       {/* Header */}
@@ -724,9 +475,9 @@ const Dashboard = ({ user, onLogout }) => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {[
-            { title: 'Total Books', value: stats.totalBooks, icon: <BookOpen className="w-8 h-8" />, color: '#E2B270' },
-            { title: 'Available', value: stats.availableBooks, icon: <BookOpen className="w-8 h-8" />, color: '#4CAF50' },
-            { title: 'Borrowed', value: stats.borrowedBooks, icon: <Users className="w-8 h-8" />, color: '#2196F3' },
+            { title: 'Total Copies', value: stats.totalBooks, icon: <BookOpen className="w-8 h-8" />, color: '#E2B270' },
+            { title: 'Unique Titles', value: stats.uniqueTitles, icon: <BookOpen className="w-8 h-8" />, color: '#4CAF50' },
+            { title: 'Active Borrows', value: stats.borrowedBooks, icon: <Users className="w-8 h-8" />, color: '#2196F3' },
             { title: 'Overdue', value: stats.overdueBooks, icon: <Clock className="w-8 h-8" />, color: '#F44336' }
           ].map((stat, idx) => (
             <div key={idx} className="bg-white rounded-xl shadow-lg p-6 flex items-center justify-between">
@@ -752,7 +503,7 @@ const Dashboard = ({ user, onLogout }) => {
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)} // Used handleTabChange instead of setActiveTab directly
                 className={`px-6 py-4 font-semibold transition ${
                   activeTab === tab.id ? 'border-b-4' : 'hover:opacity-75'
                 }`}
@@ -806,7 +557,7 @@ const Dashboard = ({ user, onLogout }) => {
                   >
                     <option value="all">All Status</option>
                     <option value="Available">Available</option>
-                    <option value="Borrowed">Borrowed</option>
+                    <option value="Unavailable">Unavailable</option> {/* Changed option value and label */}
                   </select>
                 </div>
 
@@ -820,10 +571,11 @@ const Dashboard = ({ user, onLogout }) => {
                     <table className="w-full">
                       <thead>
                         <tr style={{ backgroundColor: '#E2B270' }}>
-                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book Code</th>
+                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Code</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Title</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Author</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Category</th>
+                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Copies</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Status</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Actions</th>
                         </tr>
@@ -835,11 +587,13 @@ const Dashboard = ({ user, onLogout }) => {
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{book.title}</td>
                             <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{book.author}</td>
                             <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{book.category}</td>
+                            <td className="px-4 py-3 font-bold" style={{ color: '#3C2F2F' }}>{book.copies}</td>
                             <td className="px-4 py-3">
                               <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                book.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                book.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                               }`}>
-                                {book.status}
+                                {/* Display 'Unavailable' even if the database still says 'Out of Stock' */}
+                                {book.status === 'Out of Stock' ? 'Unavailable' : book.status}
                               </span>
                             </td>
                             <td className="px-4 py-3">
@@ -872,144 +626,265 @@ const Dashboard = ({ user, onLogout }) => {
 
             {/* Add Book Tab */}
             {activeTab === 'add' && (
-              <div>
-                <h2 className="text-2xl font-bold mb-6" style={{ color: '#3C2F2F' }}>Add New Book</h2>
-                <div className="max-w-2xl space-y-4">
-                  <div>
-                    <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Book Code *</label>
-                    <input
-                      type="text"
-                      value={newBook.bookCode}
-                      onChange={(e) => setNewBook({...newBook, bookCode: e.target.value})}
-                      className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                      style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      placeholder="e.g., BK001"
-                    />
+              <div className="max-w-6xl mx-auto">
+                {/* Removed the inner 'bg-white shadow-xl' card wrapper to fix the layout jump */}
+                <div>
+                  <div className="flex items-center mb-8 pb-4 border-b border-gray-100">
+                    <div className="p-3 rounded-full mr-4" style={{ backgroundColor: '#FFFBF0' }}>
+                      <Plus className="w-8 h-8" style={{ color: '#E2B270' }} />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold" style={{ color: '#3C2F2F' }}>Add New Book</h2>
+                      <p className="text-sm" style={{ color: '#5A4B4B' }}>Enter the details below to register a new book in the system.</p>
+                    </div>
                   </div>
-                  <div>
-                    <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Title *</label>
-                    <input
-                      type="text"
-                      value={newBook.title}
-                      onChange={(e) => setNewBook({...newBook, title: e.target.value})}
-                      className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                      style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      placeholder="Enter book title"
-                    />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                    {/* Left Column: General Information */}
+                    <div className="space-y-6">
+                      <div className="flex items-center mb-4">
+                        <BookOpen className="w-5 h-5 mr-2" style={{ color: '#E2B270' }} />
+                        <h3 className="font-bold text-lg" style={{ color: '#3C2F2F' }}>General Information</h3>
+                      </div>
+                      
+                      <div className="bg-gray-50 p-6 rounded-xl space-y-4 border border-gray-100">
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Book Title *</label>
+                          <input
+                            type="text"
+                            value={newBook.title}
+                            onChange={(e) => setNewBook({...newBook, title: e.target.value})}
+                            className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                            style={{ borderColor: '#E2B270' }}
+                            placeholder="e.g., The Great Gatsby"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Author *</label>
+                          <input
+                            type="text"
+                            value={newBook.author}
+                            onChange={(e) => setNewBook({...newBook, author: e.target.value})}
+                            className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                            style={{ borderColor: '#E2B270' }}
+                            placeholder="e.g., F. Scott Fitzgerald"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Category *</label>
+                          <input
+                            type="text"
+                            value={newBook.category}
+                            onChange={(e) => setNewBook({...newBook, category: e.target.value})}
+                            className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                            style={{ borderColor: '#E2B270' }}
+                            placeholder="e.g., Classic Literature"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Inventory Details */}
+                    <div className="space-y-6">
+                      <div className="flex items-center mb-4">
+                        <MapPin className="w-5 h-5 mr-2" style={{ color: '#E2B270' }} />
+                        <h3 className="font-bold text-lg" style={{ color: '#3C2F2F' }}>Inventory Control</h3>
+                      </div>
+
+                      <div className="bg-gray-50 p-6 rounded-xl space-y-4 border border-gray-100">
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Book Code / ISBN *</label>
+                          <input
+                            type="text"
+                            value={newBook.bookCode}
+                            onChange={(e) => setNewBook({...newBook, bookCode: e.target.value})}
+                            className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                            style={{ borderColor: '#E2B270' }}
+                            placeholder="e.g., BK-2023-001"
+                          />
+                          <p className="text-xs mt-1 text-gray-500">Must be unique for each book title.</p>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Initial Stock (Copies) *</label>
+                          <div className="flex items-center">
+                            <input
+                              type="number"
+                              min="1"
+                              value={newBook.copies}
+                              onChange={(e) => setNewBook({...newBook, copies: e.target.value})}
+                              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                              style={{ borderColor: '#E2B270' }}
+                              placeholder="1"
+                            />
+                            <span className="ml-3 text-sm font-medium" style={{ color: '#5A4B4B' }}>copies</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                        <h4 className="font-bold text-sm mb-2" style={{ color: '#3C2F2F' }}>Did you know?</h4>
+                        <p className="text-xs" style={{ color: '#5A4B4B' }}>
+                          Adding a book automatically sets its status to 'Available'. You can track its borrowing history immediately after addition.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Author *</label>
-                    <input
-                      type="text"
-                      value={newBook.author}
-                      onChange={(e) => setNewBook({...newBook, author: e.target.value})}
-                      className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                      style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      placeholder="Enter author name"
-                    />
+
+                  <div className="mt-8 flex justify-end pt-6 border-t border-gray-100">
+                    <button
+                      onClick={handleAddBook}
+                      className="px-8 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:-translate-y-1 transition transform flex items-center shadow-md"
+                      style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
+                    >
+                      <Plus className="w-5 h-5 mr-2" />
+                      Add Book to Inventory
+                    </button>
                   </div>
-                  <div>
-                    <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Category *</label>
-                    <input
-                      type="text"
-                      value={newBook.category}
-                      onChange={(e) => setNewBook({...newBook, category: e.target.value})}
-                      className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                      style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      placeholder="e.g., Fiction, Science, History"
-                    />
-                  </div>
-                  <button
-                    onClick={handleAddBook}
-                    className="w-full py-3 rounded-lg font-bold text-lg hover:opacity-90 transition flex items-center justify-center"
-                    style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
-                  >
-                    <Plus className="w-5 h-5 mr-2" />
-                    Add Book to Inventory
-                  </button>
                 </div>
               </div>
             )}
 
             {/* Borrow Book Tab */}
             {activeTab === 'borrow' && (
-              <div>
-                <h2 className="text-2xl font-bold mb-6" style={{ color: '#3C2F2F' }}>Borrow Book</h2>
-                <div className="max-w-2xl space-y-4">
-                  <div>
-                    <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Student Name *</label>
-                    <input
-                      type="text"
-                      value={borrowForm.studentName}
-                      onChange={(e) => setBorrowForm({...borrowForm, studentName: e.target.value})}
-                      className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                      style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      placeholder="Enter student name"
-                    />
+              <div className="max-w-6xl mx-auto">
+                {/* Removed the inner 'bg-white shadow-xl' card wrapper to fix the layout jump */}
+                <div>
+                  <div className="flex items-center mb-8 pb-4 border-b border-gray-100">
+                    <div className="p-3 rounded-full mr-4" style={{ backgroundColor: '#FFFBF0' }}>
+                      <BookOpen className="w-8 h-8" style={{ color: '#E2B270' }} />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold" style={{ color: '#3C2F2F' }}>Borrowing Transaction</h2>
+                      <p className="text-sm" style={{ color: '#5A4B4B' }}>Fill in the details below to check out a book.</p>
+                    </div>
                   </div>
-                  <div>
-                    <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Student Number *</label>
-                    <input
-                      type="text"
-                      value={borrowForm.studentNumber}
-                      onChange={(e) => setBorrowForm({...borrowForm, studentNumber: e.target.value})}
-                      className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                      style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      placeholder="Enter student ID number"
-                    />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                    {/* Left Column: Student Details */}
+                    <div className="space-y-6">
+                      <div className="flex items-center mb-4">
+                        <Users className="w-5 h-5 mr-2" style={{ color: '#E2B270' }} />
+                        <h3 className="font-bold text-lg" style={{ color: '#3C2F2F' }}>Student Information</h3>
+                      </div>
+                      
+                      <div className="bg-gray-50 p-6 rounded-xl space-y-4 border border-gray-100">
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Student Name *</label>
+                          <input
+                            type="text"
+                            value={borrowForm.studentName}
+                            onChange={(e) => setBorrowForm({...borrowForm, studentName: e.target.value})}
+                            className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                            style={{ borderColor: '#E2B270' }}
+                            placeholder="Enter full name"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Student ID Number *</label>
+                          <input
+                            type="text"
+                            value={borrowForm.studentNumber}
+                            onChange={(e) => setBorrowForm({...borrowForm, studentNumber: e.target.value})}
+                            className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                            style={{ borderColor: '#E2B270' }}
+                            placeholder="e.g., 2023-0001"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Book Details */}
+                    <div className="space-y-6">
+                      <div className="flex items-center mb-4">
+                        <BookOpen className="w-5 h-5 mr-2" style={{ color: '#E2B270' }} />
+                        <h3 className="font-bold text-lg" style={{ color: '#3C2F2F' }}>Book Details</h3>
+                      </div>
+
+                      <div className="bg-gray-50 p-6 rounded-xl space-y-4 border border-gray-100">
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Select Book *</label>
+                          <select
+                            value={borrowForm.bookCode}
+                            onChange={(e) => {
+                              const selectedBook = availableBooks.find(b => b.bookCode === e.target.value);
+                              setBorrowForm({
+                                ...borrowForm,
+                                bookCode: e.target.value,
+                                bookTitle: selectedBook ? selectedBook.title : ''
+                              });
+                            }}
+                            className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                            style={{ borderColor: '#E2B270' }}
+                          >
+                            <option value="">-- Select an available book --</option>
+                            {availableBooks.map(book => (
+                              <option key={book.id} value={book.bookCode}>
+                                {book.bookCode} - {book.title} ({book.copies} copies)
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Quantity *</label>
+                          <div className="flex items-center">
+                            <input
+                              type="number"
+                              min="1"
+                              value={borrowForm.borrowQuantity}
+                              onChange={(e) => setBorrowForm({...borrowForm, borrowQuantity: e.target.value})}
+                              className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white transition focus:border-yellow-400"
+                              style={{ borderColor: '#E2B270' }}
+                            />
+                            <span className="ml-3 text-sm font-medium" style={{ color: '#5A4B4B' }}>copies</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Select Book *</label>
-                    <select
-                      value={borrowForm.bookCode}
-                      onChange={(e) => {
-                        const selectedBook = availableBooks.find(b => b.bookCode === e.target.value);
-                        setBorrowForm({
-                          ...borrowForm,
-                          bookCode: e.target.value,
-                          bookTitle: selectedBook ? selectedBook.title : ''
-                        });
-                      }}
-                      className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                      style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
+
+                  {/* Bottom Section: Timeline */}
+                  <div className="mt-8 pt-6 border-t border-gray-100">
+                    <div className="flex items-center mb-6">
+                      <Clock className="w-5 h-5 mr-2" style={{ color: '#E2B270' }} />
+                      <h3 className="font-bold text-lg" style={{ color: '#3C2F2F' }}>Duration</h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-yellow-50 p-6 rounded-xl border border-yellow-100">
+                      <div>
+                        <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Borrow Date *</label>
+                        <input
+                          type="date"
+                          value={borrowForm.borrowDate}
+                          onChange={(e) => setBorrowForm({...borrowForm, borrowDate: e.target.value})}
+                          className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white"
+                          style={{ borderColor: '#E2B270' }}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold mb-2" style={{ color: '#5A4B4B' }}>Return Date *</label>
+                        <input
+                          type="date"
+                          value={borrowForm.returnDate}
+                          onChange={(e) => setBorrowForm({...borrowForm, returnDate: e.target.value})}
+                          className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none bg-white"
+                          style={{ borderColor: '#E2B270' }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 flex justify-end">
+                    <button
+                      onClick={handleBorrowBook}
+                      className="px-8 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:-translate-y-1 transition transform flex items-center"
+                      style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
                     >
-                      <option value="">-- Select an available book --</option>
-                      {availableBooks.map(book => (
-                        <option key={book.id} value={book.bookCode}>
-                          {book.bookCode} - {book.title} by {book.author}
-                        </option>
-                      ))}
-                    </select>
+                      <Plus className="w-5 h-5 mr-2" />
+                      Process Borrowing
+                    </button>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Borrow Date *</label>
-                      <input
-                        type="date"
-                        value={borrowForm.borrowDate}
-                        onChange={(e) => setBorrowForm({...borrowForm, borrowDate: e.target.value})}
-                        className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                        style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Return Date *</label>
-                      <input
-                        type="date"
-                        value={borrowForm.returnDate}
-                        onChange={(e) => setBorrowForm({...borrowForm, returnDate: e.target.value})}
-                        className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
-                        style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleBorrowBook}
-                    className="w-full py-3 rounded-lg font-bold text-lg hover:opacity-90 transition"
-                    style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
-                  >
-                    Process Borrowing
-                  </button>
                 </div>
               </div>
             )}
@@ -1027,12 +902,10 @@ const Dashboard = ({ user, onLogout }) => {
                     <table className="w-full">
                       <thead>
                         <tr style={{ backgroundColor: '#E2B270' }}>
-                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Student Name</th>
-                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Student Number</th>
+                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Student</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book</th>
-                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book Code</th>
-                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Borrow Date</th>
-                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Return Date</th>
+                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Qty</th>
+                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Due Date</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Action</th>
                         </tr>
                       </thead>
@@ -1040,10 +913,8 @@ const Dashboard = ({ user, onLogout }) => {
                         {activeBorrowedBooks.map((record, idx) => (
                           <tr key={record.id} className={idx % 2 === 0 ? 'bg-white' : ''} style={{ backgroundColor: idx % 2 !== 0 ? '#FFFBF0' : 'white' }}>
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{record.studentName}</td>
-                            <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.studentNumber}</td>
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{record.bookTitle}</td>
-                            <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.bookCode}</td>
-                            <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.borrowDate}</td>
+                            <td className="px-4 py-3 font-bold" style={{ color: '#3C2F2F' }}>{record.borrowQuantity || 1}</td>
                             <td className="px-4 py-3">
                               <span className={isOverdue(record.returnDate) ? 'text-red-600 font-bold' : ''} style={{ color: isOverdue(record.returnDate) ? '#F44336' : '#5A4B4B' }}>
                                 {record.returnDate}
@@ -1052,7 +923,7 @@ const Dashboard = ({ user, onLogout }) => {
                             </td>
                             <td className="px-4 py-3">
                               <button
-                                onClick={() => handleReturnBook(record.id, record.bookCode)}
+                                onClick={() => handleReturnBook(record.id, record.bookCode, record.borrowQuantity)}
                                 className="px-4 py-2 rounded text-white hover:opacity-90"
                                 style={{ backgroundColor: '#4CAF50' }}
                               >
@@ -1080,9 +951,7 @@ const Dashboard = ({ user, onLogout }) => {
                     <thead>
                       <tr className="bg-red-100">
                         <th className="px-4 py-3 text-left text-red-900">Student Name</th>
-                        <th className="px-4 py-3 text-left text-red-900">Student Number</th>
                         <th className="px-4 py-3 text-left text-red-900">Book</th>
-                        <th className="px-4 py-3 text-left text-red-900">Book Code</th>
                         <th className="px-4 py-3 text-left text-red-900">Due Date</th>
                         <th className="px-4 py-3 text-left text-red-900">Days Overdue</th>
                         <th className="px-4 py-3 text-left text-red-900">Action</th>
@@ -1094,14 +963,12 @@ const Dashboard = ({ user, onLogout }) => {
                         return (
                           <tr key={record.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-red-50'}>
                             <td className="px-4 py-3 font-semibold" style={{ color: '#3C2F2F' }}>{record.studentName}</td>
-                            <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.studentNumber}</td>
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{record.bookTitle}</td>
-                            <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.bookCode}</td>
                             <td className="px-4 py-3 text-red-600 font-bold">{record.returnDate}</td>
                             <td className="px-4 py-3 text-red-600 font-bold">{daysOverdue} days</td>
                             <td className="px-4 py-3">
                               <button
-                                onClick={() => handleReturnBook(record.id, record.bookCode)}
+                                onClick={() => handleReturnBook(record.id, record.bookCode, record.borrowQuantity)}
                                 className="px-4 py-2 rounded text-white hover:opacity-90"
                                 style={{ backgroundColor: '#4CAF50' }}
                               >
@@ -1113,9 +980,6 @@ const Dashboard = ({ user, onLogout }) => {
                       })}
                     </tbody>
                   </table>
-                  {overdueBorrowedBooks.length === 0 && (
-                    <p className="text-center py-8" style={{ color: '#5A4B4B' }}>No overdue books - Great job!</p>
-                  )}
                 </div>
               </div>
             )}
@@ -1129,10 +993,8 @@ const Dashboard = ({ user, onLogout }) => {
                     <thead>
                       <tr style={{ backgroundColor: '#E2B270' }}>
                         <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Student Name</th>
-                        <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Student Number</th>
                         <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book</th>
-                        <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book Code</th>
-                        <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Borrowed</th>
+                        <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Qty</th>
                         <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Returned</th>
                       </tr>
                     </thead>
@@ -1140,10 +1002,8 @@ const Dashboard = ({ user, onLogout }) => {
                       {returnedBooks.map((record, idx) => (
                         <tr key={record.id} className={idx % 2 === 0 ? 'bg-white' : ''} style={{ backgroundColor: idx % 2 !== 0 ? '#FFFBF0' : 'white' }}>
                           <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{record.studentName}</td>
-                          <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.studentNumber}</td>
                           <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{record.bookTitle}</td>
-                          <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.bookCode}</td>
-                          <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.borrowDate}</td>
+                          <td className="px-4 py-3 font-bold" style={{ color: '#5A4B4B' }}>{record.borrowQuantity || 1}</td>
                           <td className="px-4 py-3">
                             <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
                               {record.returnDate}
@@ -1153,9 +1013,6 @@ const Dashboard = ({ user, onLogout }) => {
                       ))}
                     </tbody>
                   </table>
-                  {returnedBooks.length === 0 && (
-                    <p className="text-center py-8" style={{ color: '#5A4B4B' }}>No return history yet</p>
-                  )}
                 </div>
               </div>
             )}
@@ -1205,6 +1062,17 @@ const Dashboard = ({ user, onLogout }) => {
                   type="text"
                   value={editingBook.category}
                   onChange={(e) => setEditingBook({...editingBook, category: e.target.value})}
+                  className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
+                  style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
+                />
+              </div>
+              <div>
+                <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Copies</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={editingBook.copies}
+                  onChange={(e) => setEditingBook({...editingBook, copies: e.target.value})}
                   className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none"
                   style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
                 />
@@ -1265,7 +1133,7 @@ const Dashboard = ({ user, onLogout }) => {
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentView, setCurrentView] = useState('landing'); // 'landing', 'login', 'signup', 'dashboard'
+  const [currentView, setCurrentView] = useState('landing');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -1275,7 +1143,6 @@ const App = () => {
         setCurrentView('dashboard');
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -1299,27 +1166,10 @@ const App = () => {
     );
   }
 
-  if (currentView === 'landing' && !user) {
-    return <LandingPage onNavigateToLogin={() => setCurrentView('login')} />;
-  }
-
-  if (currentView === 'login' && !user) {
-    return (
-      <Login 
-        onSwitchToSignup={() => setCurrentView('signup')}
-        onBack={() => setCurrentView('landing')}
-      />
-    );
-  }
-
-  if (currentView === 'signup' && !user) {
-    return <Signup onSwitchToLogin={() => setCurrentView('login')} />;
-  }
-
-  if (user) {
-    return <Dashboard user={user} onLogout={handleLogout} />;
-  }
-
+  if (currentView === 'landing' && !user) return <LandingPage onNavigateToLogin={() => setCurrentView('login')} />;
+  if (currentView === 'login' && !user) return <Login onSwitchToSignup={() => setCurrentView('signup')} onBack={() => setCurrentView('landing')} />;
+  if (currentView === 'signup' && !user) return <Signup onSwitchToLogin={() => setCurrentView('login')} />;
+  if (user) return <Dashboard user={user} onLogout={handleLogout} />;
   return <LandingPage onNavigateToLogin={() => setCurrentView('login')} />;
 };
 

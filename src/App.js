@@ -592,12 +592,18 @@ const Dashboard = ({ user, onLogout }) => {
     }
     
     try {
-      await addDoc(collection(db, 'books'), {
+      // Create the book document and then store the generated Firestore id as a uniqueId
+      const docRef = await addDoc(collection(db, 'books'), {
         ...newBook,
         status: 'Available',
         dateAdded: serverTimestamp()
       });
-      
+
+      // Save the generated id on the document so every book has a persistent unique identifier
+      await updateDoc(doc(db, 'books', docRef.id), {
+        uniqueId: docRef.id
+      });
+
       setToast({ message: 'Book added successfully!', type: 'success' });
       setNewBook({ title: '', bookCode: '', author: '', category: '' });
       fetchBooks();
@@ -969,6 +975,7 @@ const Dashboard = ({ user, onLogout }) => {
                     <table className="w-full">
                       <thead>
                         <tr style={{ backgroundColor: '#E2B270' }}>
+                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>ID</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book Code</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Title</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Author</th>
@@ -980,6 +987,7 @@ const Dashboard = ({ user, onLogout }) => {
                       <tbody>
                         {filteredBooks.map((book, idx) => (
                           <tr key={book.id} className={idx % 2 === 0 ? 'bg-white' : ''} style={{ backgroundColor: idx % 2 !== 0 ? '#FFFBF0' : 'white' }}>
+                            <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{book.uniqueId || book.id}</td>
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{book.bookCode}</td>
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{book.title}</td>
                             <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{book.author}</td>

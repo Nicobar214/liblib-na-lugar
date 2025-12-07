@@ -53,6 +53,48 @@ const Toast = ({ message, type, onClose }) => {
 
 // Landing Page Component
 const LandingPage = ({ onNavigateToLogin }) => {
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [contactToast, setContactToast] = useState(null);
+  const [contactLoading, setContactLoading] = useState(false);
+
+  const handleContactSubmit = async () => {
+    const { name, email, subject, message } = contactForm;
+    
+    if (!name || !email || !subject || !message) {
+      setContactToast({ message: 'Please fill in all fields', type: 'error' });
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setContactToast({ message: 'Please enter a valid email', type: 'error' });
+      return;
+    }
+
+    setContactLoading(true);
+    try {
+      await addDoc(collection(db, 'contactMessages'), {
+        name,
+        email,
+        subject,
+        message,
+        submittedAt: serverTimestamp()
+      });
+
+      setContactToast({ message: 'Message sent successfully! We will get back to you soon.', type: 'success' });
+      setContactForm({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setContactToast({ message: `Error: ${error.message}`, type: 'error' });
+    } finally {
+      setContactLoading(false);
+    }
+  };
+
   return (
     <div style={{ fontFamily: 'Montserrat, sans-serif' }}>
       {/* Hero Section */}
@@ -156,10 +198,13 @@ const LandingPage = ({ onNavigateToLogin }) => {
 
           <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-6">
+              {contactToast && <Toast message={contactToast.message} type={contactToast.type} onClose={() => setContactToast(null)} />}
               <div>
                 <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Your Name *</label>
                 <input 
-                  type="text" 
+                  type="text"
+                  value={contactForm.name}
+                  onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
                   className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
                   placeholder="Enter your full name"
@@ -168,7 +213,9 @@ const LandingPage = ({ onNavigateToLogin }) => {
               <div>
                 <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Your Email *</label>
                 <input 
-                  type="email" 
+                  type="email"
+                  value={contactForm.email}
+                  onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
                   className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
                   placeholder="Enter your email address"
@@ -177,7 +224,9 @@ const LandingPage = ({ onNavigateToLogin }) => {
               <div>
                 <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Subject *</label>
                 <input 
-                  type="text" 
+                  type="text"
+                  value={contactForm.subject}
+                  onChange={(e) => setContactForm({...contactForm, subject: e.target.value})}
                   className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
                   placeholder="What is this about?"
@@ -187,17 +236,20 @@ const LandingPage = ({ onNavigateToLogin }) => {
                 <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Your Message *</label>
                 <textarea 
                   rows="5"
+                  value={contactForm.message}
+                  onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
                   className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none resize-none"
                   style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
                   placeholder="Tell us more..."
                 />
               </div>
               <button 
-                type="submit"
-                className="w-full py-4 rounded-lg font-bold text-lg hover:opacity-90 transition"
+                onClick={handleContactSubmit}
+                disabled={contactLoading}
+                className="w-full py-4 rounded-lg font-bold text-lg hover:opacity-90 transition disabled:opacity-50"
                 style={{ backgroundColor: '#E2B270', color: '#3C2F2F' }}
               >
-                Send Message
+                {contactLoading ? 'Sending...' : 'Send Message'}
               </button>
             </div>
 
@@ -467,6 +519,9 @@ const Dashboard = ({ user, onLogout }) => {
   const [bookCategoryFilter, setBookCategoryFilter] = useState('all');
   const [editingBook, setEditingBook] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  const [selectedReturned, setSelectedReturned] = useState([]);
+  const [selectedStudentToContact, setSelectedStudentToContact] = useState(null);
+  const [contactMessage, setContactMessage] = useState('');
   
   const [newBook, setNewBook] = useState({
     title: '',
@@ -708,6 +763,60 @@ const Dashboard = ({ user, onLogout }) => {
 
   const activeBorrowedBooks = borrowedBooks.filter(b => !b.returned);
   const returnedBooks = borrowedBooks.filter(b => b.returned);
+
+  const toggleSelectReturned = (id) => {
+    setSelectedReturned(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const toggleSelectAllReturned = () => {
+    if (selectedReturned.length === returnedBooks.length) {
+      setSelectedReturned([]);
+    } else {
+      setSelectedReturned(returnedBooks.map(r => r.id));
+    }
+  };
+
+  const handleDeleteSelectedReturned = async () => {
+    if (selectedReturned.length === 0) {
+      setToast({ message: 'No records selected', type: 'error' });
+      return;
+    }
+
+    if (!window.confirm(`Delete ${selectedReturned.length} selected record(s)? This cannot be undone.`)) return;
+
+    setLoading(true);
+    try {
+      await Promise.all(selectedReturned.map(id => deleteDoc(doc(db, 'borrowedBooks', id))));
+      setToast({ message: `${selectedReturned.length} record(s) deleted`, type: 'success' });
+      setSelectedReturned([]);
+      fetchBorrowedBooks();
+      fetchBooks();
+    } catch (error) {
+      setToast({ message: 'Error deleting records', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendContactEmail = (student) => {
+    if (!contactMessage.trim()) {
+      setToast({ message: 'Please type a message', type: 'error' });
+      return;
+    }
+
+    if (!student.studentEmail) {
+      setToast({ message: 'Student email not available', type: 'error' });
+      return;
+    }
+
+    const subject = encodeURIComponent(`Library Notice: Overdue Book - ${student.bookTitle}`);
+    const body = encodeURIComponent(`Dear ${student.studentName},\n\n${contactMessage}\n\nPlease return the book as soon as possible.\n\nThank you.\n- BookHive Library`);
+    const mailto = `mailto:${student.studentEmail}?subject=${subject}&body=${body}`;
+    window.open(mailto, '_blank');
+    setToast({ message: `Email opened for ${student.studentEmail}`, type: 'success' });
+    setSelectedStudentToContact(null);
+    setContactMessage('');
+  };
   
   // Check for overdue books
   const isOverdue = (returnDate) => {
@@ -1240,8 +1349,8 @@ const Dashboard = ({ user, onLogout }) => {
                     {activeBorrowedBooks.map((record) => {
                       const daysLeft = Math.ceil((new Date(record.returnDate) - new Date()) / (1000 * 60 * 60 * 24));
                       const isOD = isOverdue(record.returnDate);
-                      return (
-                        <div key={record.id} className="bg-white rounded-2xl shadow-lg p-6 border-l-4 hover:shadow-xl transition" style={{ borderColor: isOD ? '#F44336' : '#E2B270' }}>
+                        return (
+                        <div key={record.id} className="bg-white rounded-2xl shadow-lg p-6 border-l-4 hover:shadow-xl transition relative pb-12" style={{ borderColor: isOD ? '#F44336' : '#E2B270' }}>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                               <p className="text-sm uppercase font-bold" style={{ color: '#5A4B4B' }}>Student</p>
@@ -1295,22 +1404,16 @@ const Dashboard = ({ user, onLogout }) => {
                               </p>}
                             </div>
                           </div>
-                          <div className="mt-6 pt-6 border-t flex gap-3" style={{ borderColor: '#F0E6D6' }}>
+                          <div className="mt-6 pt-6 border-t" style={{ borderColor: '#F0E6D6' }}></div>
+
+                          <div className="absolute bottom-4 right-4">
                             <button
                               onClick={() => handleReturnBook(record.id, record.bookCode)}
-                              className="flex-1 py-3 rounded-lg font-bold text-white hover:shadow-md transition flex items-center justify-center gap-2"
+                              className="py-3 px-4 rounded-lg font-bold text-white hover:shadow-md transition flex items-center justify-center gap-2"
                               style={{ backgroundColor: '#4CAF50' }}
                             >
                               <CheckCircle className="w-5 h-5" />
                               Mark as Returned
-                            </button>
-                            <button
-                              onClick={() => handleSendReminder(record)}
-                              className="flex-1 py-3 rounded-lg font-bold transition hover:shadow-md flex items-center justify-center gap-2"
-                              style={{ backgroundColor: '#FFFBF0', color: '#E2B270', border: '2px solid #E2B270' }}
-                            >
-                              <Send className="w-5 h-5" />
-                              Send Reminder
                             </button>
                           </div>
                         </div>
@@ -1377,10 +1480,11 @@ const Dashboard = ({ user, onLogout }) => {
                               Mark as Returned
                             </button>
                             <button
+                              onClick={() => setSelectedStudentToContact(record)}
                               className="flex-1 py-3 rounded-lg font-bold transition hover:shadow-md flex items-center justify-center gap-2"
                               style={{ backgroundColor: '#FFEBEE', color: '#F44336', border: '2px solid #F44336' }}
                             >
-                              <AlertCircle className="w-5 h-5" />
+                              <Mail className="w-5 h-5" />
                               Contact Student
                             </button>
                           </div>
@@ -1395,11 +1499,43 @@ const Dashboard = ({ user, onLogout }) => {
             {/* Return History Tab */}
             {activeTab === 'history' && (
               <div>
-                <h2 className="text-2xl font-bold mb-6" style={{ color: '#3C2F2F' }}>Return History</h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold mb-6" style={{ color: '#3C2F2F' }}>Return History</h2>
+                  <div className="mb-4 flex items-center gap-3">
+                    {selectedReturned.length > 0 && (
+                      <button
+                        onClick={handleDeleteSelectedReturned}
+                        className="py-2 px-4 rounded-lg font-bold text-white hover:shadow-md transition"
+                        style={{ backgroundColor: '#F44336' }}
+                      >
+                        Delete Selected ({selectedReturned.length})
+                      </button>
+                    )}
+                  </div>
+                </div>
+
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr style={{ backgroundColor: '#E2B270' }}>
+                        <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>
+                          {selectedReturned.length > 0 ? (
+                            <button
+                              onClick={toggleSelectAllReturned}
+                              className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full border hover:shadow-sm text-sm"
+                              style={{ backgroundColor: '#FFFBF0', borderColor: '#E2B270', color: '#3C2F2F' }}
+                            >
+                              {selectedReturned.length === returnedBooks.length && returnedBooks.length > 0 ? (
+                                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-green-500 text-white">
+                                  <CheckCircle className="w-3 h-3" />
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border" style={{ borderColor: '#D1D5DB' }} />
+                              )}
+                              <span className="text-sm">{selectedReturned.length === returnedBooks.length && returnedBooks.length > 0 ? 'Deselect All' : 'Select All'}</span>
+                            </button>
+                          ) : null}
+                        </th>
                         <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Student Name</th>
                         <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Student Number</th>
                         <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book</th>
@@ -1411,6 +1547,14 @@ const Dashboard = ({ user, onLogout }) => {
                     <tbody>
                       {returnedBooks.map((record, idx) => (
                         <tr key={record.id} className={idx % 2 === 0 ? 'bg-white' : ''} style={{ backgroundColor: idx % 2 !== 0 ? '#FFFBF0' : 'white' }}>
+                          <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>
+                            <button
+                              onClick={() => toggleSelectReturned(record.id)}
+                              className={`inline-flex items-center justify-center w-5 h-5 rounded-full transition ${selectedReturned.includes(record.id) ? 'bg-green-500 text-white' : 'border border-gray-300 text-gray-500'}`}
+                            >
+                              {selectedReturned.includes(record.id) ? <CheckCircle className="w-3 h-3" /> : null}
+                            </button>
+                          </td>
                           <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{record.studentName}</td>
                           <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{record.studentNumber}</td>
                           <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{record.bookTitle}</td>
@@ -1497,6 +1641,55 @@ const Dashboard = ({ user, onLogout }) => {
                   Cancel
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Contact Student Modal */}
+      {selectedStudentToContact && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full">
+            <h3 className="text-2xl font-bold mb-4" style={{ color: '#3C2F2F' }}>Contact Student</h3>
+            <p className="mb-4" style={{ color: '#5A4B4B' }}>
+              <strong>{selectedStudentToContact.studentName}</strong> - Overdue Book: <strong>{selectedStudentToContact.bookTitle}</strong>
+            </p>
+            <p className="text-sm mb-4" style={{ color: '#A89898' }}>
+              Email: {selectedStudentToContact.studentEmail || 'Not available'}
+            </p>
+            
+            <div className="mb-6">
+              <label className="block font-bold mb-2" style={{ color: '#3C2F2F' }}>Message *</label>
+              <textarea
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                rows="6"
+                className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none resize-none"
+                style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
+                placeholder="Type your message here..."
+              />
+              <p className="text-sm mt-2" style={{ color: '#A89898' }}>Note: The system will add a greeting and closing. Keep the message professional and brief.</p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleSendContactEmail(selectedStudentToContact)}
+                className="flex-1 py-3 rounded-lg font-bold hover:opacity-90 text-white flex items-center justify-center gap-2 transition"
+                style={{ backgroundColor: '#E2B270' }}
+              >
+                <Mail className="w-5 h-5" />
+                Send Email
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedStudentToContact(null);
+                  setContactMessage('');
+                }}
+                className="flex-1 py-3 rounded-lg font-bold hover:opacity-90"
+                style={{ backgroundColor: '#5A4B4B', color: 'white' }}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

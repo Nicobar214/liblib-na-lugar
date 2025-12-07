@@ -518,6 +518,7 @@ const Dashboard = ({ user, onLogout }) => {
   const [bookSearch, setBookSearch] = useState('');
   const [bookCategoryFilter, setBookCategoryFilter] = useState('all');
   const [editingBook, setEditingBook] = useState(null);
+  const [editingOriginalBookCode, setEditingOriginalBookCode] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [selectedReturned, setSelectedReturned] = useState([]);
   const [selectedStudentToContact, setSelectedStudentToContact] = useState(null);
@@ -585,7 +586,8 @@ const Dashboard = ({ user, onLogout }) => {
     }
     
     // Check for duplicate book code
-    const existingBook = books.find(book => book.bookCode.toLowerCase() === newBook.bookCode.toLowerCase());
+    const codeNormalized = newBook.bookCode.trim();
+    const existingBook = books.find(book => book.bookCode && book.bookCode.toLowerCase() === codeNormalized.toLowerCase());
     if (existingBook) {
       setToast({ message: 'Book code already exists!', type: 'error' });
       return;
@@ -595,6 +597,7 @@ const Dashboard = ({ user, onLogout }) => {
       // Create the book document and then store the generated Firestore id as a uniqueId
       const docRef = await addDoc(collection(db, 'books'), {
         ...newBook,
+        bookCode: codeNormalized,
         status: 'Available',
         dateAdded: serverTimestamp()
       });
@@ -622,7 +625,10 @@ const Dashboard = ({ user, onLogout }) => {
 
     // Server-side check: query Firestore for any other book with the same bookCode
     try {
-      const q = query(collection(db, 'books'), where('bookCode', '==', editingBook.bookCode));
+      // Normalize codes for comparison and storage
+      const newCodeNormalized = editingBook.bookCode.trim();
+
+      const q = query(collection(db, 'books'), where('bookCode', '==', newCodeNormalized));
       const qSnap = await getDocs(q);
       const conflict = qSnap.docs.find(d => d.id !== editingBook.id && (d.data().bookCode || '').toLowerCase() === normalizedCode);
       if (conflict) {
@@ -632,13 +638,42 @@ const Dashboard = ({ user, onLogout }) => {
 
       await updateDoc(doc(db, 'books', editingBook.id), {
         title: editingBook.title,
-        bookCode: editingBook.bookCode,
+        bookCode: newCodeNormalized,
         author: editingBook.author,
         category: editingBook.category
       });
 
+      // If the bookCode changed, update any borrowedBooks records that referenced the old code
+      const oldCode = (editingOriginalBookCode || '').trim();
+      if (oldCode && oldCode !== newCodeNormalized) {
+        try {
+          const bq = query(collection(db, 'borrowedBooks'), where('bookCode', '==', oldCode));
+          const bSnap = await getDocs(bq);
+          const updates = bSnap.docs.map(d => updateDoc(doc(db, 'borrowedBooks', d.id), {
+            bookCode: newCodeNormalized,
+            bookTitle: editingBook.title
+          }));
+          await Promise.all(updates);
+        } catch (err) {
+          console.error('Error syncing borrowedBooks codes:', err);
+        }
+      }
+
+      // Always update borrowedBooks records with the new title for the (new) code
+      try {
+        const bq2 = query(collection(db, 'borrowedBooks'), where('bookCode', '==', newCodeNormalized));
+        const bSnap2 = await getDocs(bq2);
+        const titleUpdates = bSnap2.docs.map(d => updateDoc(doc(db, 'borrowedBooks', d.id), {
+          bookTitle: editingBook.title
+        }));
+        await Promise.all(titleUpdates);
+      } catch (err) {
+        console.error('Error syncing borrowedBooks titles:', err);
+      }
+
       setToast({ message: 'Book updated successfully!', type: 'success' });
       setEditingBook(null);
+      setEditingOriginalBookCode(null);
       fetchBooks();
     } catch (error) {
       console.error('Error updating book:', error);
@@ -745,25 +780,53 @@ const Dashboard = ({ user, onLogout }) => {
 
   const handleReturnBook = async (borrowedBookId, bookCode) => {
     try {
-      const bookQuery = query(collection(db, 'books'), where('bookCode', '==', bookCode));
-      const bookSnapshot = await getDocs(bookQuery);
-      
-      if (!bookSnapshot.empty) {
-        const bookDoc = bookSnapshot.docs[0];
-        await updateDoc(doc(db, 'books', bookDoc.id), {
+      // Try an exact match first
+      let foundBookDoc = null;
+      try {
+        const bookQuery = query(collection(db, 'books'), where('bookCode', '==', bookCode));
+        const bookSnapshot = await getDocs(bookQuery);
+        if (!bookSnapshot.empty) {
+          foundBookDoc = bookSnapshot.docs[0];
+        }
+      } catch (qErr) {
+        console.error('Error querying books by code:', qErr);
+      }
+
+      // If not found, fallback to fetching all books and matching normalized codes (case/whitespace tolerant)
+      if (!foundBookDoc) {
+        const allBooksSnap = await getDocs(collection(db, 'books'));
+        const normalizedTarget = (bookCode || '').trim().toLowerCase();
+        for (const bdoc of allBooksSnap.docs) {
+          const bdata = bdoc.data();
+          if ((bdata.bookCode || '').trim().toLowerCase() === normalizedTarget) {
+            foundBookDoc = bdoc;
+            break;
+          }
+        }
+      }
+
+      if (foundBookDoc) {
+        await updateDoc(doc(db, 'books', foundBookDoc.id), {
           status: 'Available'
         });
+      } else {
+        console.warn('Returned book code not found in books collection:', bookCode);
       }
-      
-      await updateDoc(doc(db, 'borrowedBooks', borrowedBookId), {
+
+      // Mark the borrowed record as returned only if not already marked
+      const borrowedRef = doc(db, 'borrowedBooks', borrowedBookId);
+      const borrowedSnap = await getDocs(query(collection(db, 'borrowedBooks'), where('__name__', '==', borrowedBookId)));
+      // Firestore doesn't allow querying by document ID with where('__name__','==',...), getDocs on doc directly is simpler
+      await updateDoc(borrowedRef, {
         returned: true,
         returnedAt: serverTimestamp()
       });
-      
+
       setToast({ message: 'Book returned successfully!', type: 'success' });
       fetchBooks();
       fetchBorrowedBooks();
     } catch (error) {
+      console.error('Error returning book:', error);
       setToast({ message: 'Error returning book', type: 'error' });
     }
   };
@@ -1011,7 +1074,7 @@ const Dashboard = ({ user, onLogout }) => {
                             </td>
                             <td className="px-4 py-3">
                               <button
-                                onClick={() => setEditingBook(book)}
+                                onClick={() => { setEditingBook(book); setEditingOriginalBookCode(book.bookCode || ''); }}
                                 className="px-3 py-1 rounded mr-2 text-white hover:opacity-90"
                                 style={{ backgroundColor: '#2196F3' }}
                               >
@@ -1643,7 +1706,7 @@ const Dashboard = ({ user, onLogout }) => {
                   style={{ borderColor: '#E2B270', backgroundColor: '#FFFBF0' }}
                 />
               </div>
-              <div className="flex gap-3 mt-6">
+                <div className="flex gap-3 mt-6">
                 <button
                   onClick={handleEditBook}
                   className="flex-1 py-3 rounded-lg font-bold hover:opacity-90"
@@ -1652,7 +1715,7 @@ const Dashboard = ({ user, onLogout }) => {
                   Save Changes
                 </button>
                 <button
-                  onClick={() => setEditingBook(null)}
+                  onClick={() => { setEditingBook(null); setEditingOriginalBookCode(null); }}
                   className="flex-1 py-3 rounded-lg font-bold hover:opacity-90"
                   style={{ backgroundColor: '#5A4B4B', color: 'white' }}
                 >

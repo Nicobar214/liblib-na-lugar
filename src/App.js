@@ -617,19 +617,31 @@ const Dashboard = ({ user, onLogout }) => {
       setToast({ message: 'Please fill in all fields', type: 'error' });
       return;
     }
-    
+    // Normalize book code for comparison
+    const normalizedCode = editingBook.bookCode.trim().toLowerCase();
+
+    // Server-side check: query Firestore for any other book with the same bookCode
     try {
+      const q = query(collection(db, 'books'), where('bookCode', '==', editingBook.bookCode));
+      const qSnap = await getDocs(q);
+      const conflict = qSnap.docs.find(d => d.id !== editingBook.id && (d.data().bookCode || '').toLowerCase() === normalizedCode);
+      if (conflict) {
+        setToast({ message: 'Book code already exists!', type: 'error' });
+        return;
+      }
+
       await updateDoc(doc(db, 'books', editingBook.id), {
         title: editingBook.title,
         bookCode: editingBook.bookCode,
         author: editingBook.author,
         category: editingBook.category
       });
-      
+
       setToast({ message: 'Book updated successfully!', type: 'success' });
       setEditingBook(null);
       fetchBooks();
     } catch (error) {
+      console.error('Error updating book:', error);
       setToast({ message: 'Error updating book', type: 'error' });
     }
   };
@@ -975,7 +987,6 @@ const Dashboard = ({ user, onLogout }) => {
                     <table className="w-full">
                       <thead>
                         <tr style={{ backgroundColor: '#E2B270' }}>
-                          <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>ID</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Book Code</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Title</th>
                           <th className="px-4 py-3 text-left" style={{ color: '#3C2F2F' }}>Author</th>
@@ -987,7 +998,6 @@ const Dashboard = ({ user, onLogout }) => {
                       <tbody>
                         {filteredBooks.map((book, idx) => (
                           <tr key={book.id} className={idx % 2 === 0 ? 'bg-white' : ''} style={{ backgroundColor: idx % 2 !== 0 ? '#FFFBF0' : 'white' }}>
-                            <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{book.uniqueId || book.id}</td>
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{book.bookCode}</td>
                             <td className="px-4 py-3" style={{ color: '#3C2F2F' }}>{book.title}</td>
                             <td className="px-4 py-3" style={{ color: '#5A4B4B' }}>{book.author}</td>

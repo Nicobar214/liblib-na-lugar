@@ -185,7 +185,7 @@ const LandingPage = ({ onNavigateToLogin }) => {
       </div>
 
       {/* Contact Section */}
-      <div id="contact" className="min-h-screen py-20" style={{ background: 'linear-gradient(135deg, #F4E6C2 0%, #F8F4E3 100%)' }}>
+      <div id="contact" className="min-h-screen py-20" style={{ background: '#fff1cf'  }}>
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-5xl italic mb-4" style={{ fontFamily: 'Playfair Display, serif', color: '#3C2F2F' }}>
@@ -937,7 +937,7 @@ const Dashboard = ({ user, onLogout }) => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <img src="bookhive logo.png" alt="BookHive Logo" className="h-10 mr-3" />
-            <h1 className="text-2xl font-bold" style={{ color: '#E2B270' }}>BookHive Dashboard</h1>
+            <h1 className="text-2xl font-bold" style={{ color: '#E2B270' }}>BookHive</h1>
           </div>
           <button
             onClick={onLogout}
